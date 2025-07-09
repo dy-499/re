@@ -1,10 +1,624 @@
-<html>
-	<head>
-		<title>第一个页面</title>
-	</head>
-	<body>
-	努力<br />
-	<p>加油</p>
-	qqq<br >
-	</body>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评论交流区 - 畅所欲言</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .comment-app {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .comment-form {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-title {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        button i {
+            margin-right: 8px;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .comment-stats {
+            padding: 15px 30px;
+            background: #f1f8ff;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            border-bottom: 1px solid #e0e6ed;
+        }
+        
+        .comments-section {
+            padding: 20px 30px;
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .comment {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .comment:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        
+        .user-info {
+            flex-grow: 1;
+        }
+        
+        .username {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .timestamp {
+            color: #95a5a6;
+            font-size: 0.85rem;
+        }
+        
+        .comment-content {
+            margin: 15px 0 20px;
+            color: #34495e;
+            line-height: 1.7;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .action-btn i {
+            margin-right: 6px;
+        }
+        
+        .action-btn:hover {
+            background: #f5f7fa;
+            color: #3498db;
+        }
+        
+        .like-btn.active {
+            color: #e74c3c;
+        }
+        
+        .reply-form {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .replies {
+            margin-left: 65px;
+            margin-top: 20px;
+            border-left: 3px solid #e0e6ed;
+            padding-left: 25px;
+        }
+        
+        .replies .comment {
+            background: #f8f9fa;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .comment-form {
+                padding: 20px;
+            }
+            
+            .replies {
+                margin-left: 30px;
+                padding-left: 15px;
+            }
+            
+            .comment-actions {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>评论交流区</h1>
+            <p class="subtitle">在这里分享您的想法、提问或与其他用户交流。我们鼓励积极、有建设性的讨论。</p>
+        </header>
+        
+        <div class="comment-app">
+            <div class="comment-form">
+                <h2 class="form-title">发表您的评论</h2>
+                <div class="form-group">
+                    <label for="username">您的姓名</label>
+                    <input type="text" id="username" placeholder="输入您的姓名（可选）">
+                </div>
+                <div class="form-group">
+                    <label for="comment">评论内容 <span style="color: #e74c3c">*</span></label>
+                    <textarea id="comment" placeholder="请在此输入您的评论..." required></textarea>
+                </div>
+                <button id="submit-comment"><i class="fas fa-paper-plane"></i> 发布评论</button>
+            </div>
+            
+            <div class="comment-stats">
+                <div class="total-comments"><i class="fas fa-comments"></i> 共 <span id="comment-count">7</span> 条评论</div>
+                <div class="sort-options">
+                    <select id="sort-select">
+                        <option value="newest">最新优先</option>
+                        <option value="oldest">最早优先</option>
+                        <option value="popular">最受欢迎</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="comments-section">
+                <h3 class="section-title"><i class="fas fa-comment-dots"></i> 所有评论</h3>
+                
+                <div id="comments-container">
+                    <!-- 评论将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 评论交流区 | 尊重他人观点，共建和谐社区</p>
+        </footer>
+    </div>
+
+    <script>
+        // 评论数据
+        let comments = [
+            {
+                id: 1,
+                username: "张明",
+                timestamp: "2023-07-08 14:30",
+                content: "这个设计太棒了！UI简洁大方，交互也很流畅。特别喜欢渐变背景和卡片悬停效果。",
+                likes: 24,
+                liked: false,
+                replies: [
+                    {
+                        id: 11,
+                        username: "李华",
+                        timestamp: "2023-07-08 15:12",
+                        content: "完全同意！卡片阴影和悬停动画让整个界面看起来非常现代和专业。",
+                        likes: 8,
+                        liked: false
+                    },
+                    {
+                        id: 12,
+                        username: "王芳",
+                        timestamp: "2023-07-08 16:45",
+                        content: "我觉得还可以增加夜间模式，这样在光线暗的环境下使用会更舒适。",
+                        likes: 12,
+                        liked: true
+                    }
+                ]
+            },
+            {
+                id: 2,
+                username: "技术达人",
+                timestamp: "2023-07-07 09:45",
+                content: "功能很完善，不过建议添加编辑评论的功能，这样用户发现错误时可以及时修正。",
+                likes: 18,
+                liked: true,
+                replies: [
+                    {
+                        id: 21,
+                        username: "设计爱好者",
+                        timestamp: "2023-07-07 11:20",
+                        content: "好建议！另外我觉得回复功能可以再明显一些，比如在每条评论下面直接显示回复框。",
+                        likes: 5,
+                        liked: false
+                    }
+                ]
+            },
+            {
+                id: 3,
+                username: "旅行者",
+                timestamp: "2023-07-06 18:20",
+                content: "这个评论区的响应式设计做得不错，在我的手机和平板上显示效果都很好。",
+                likes: 15,
+                liked: false,
+                replies: []
+            }
+        ];
+        
+        // 获取DOM元素
+        const commentsContainer = document.getElementById('comments-container');
+        const commentForm = document.getElementById('submit-comment');
+        const commentCount = document.getElementById('comment-count');
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderComments();
+            updateCommentCount();
+            
+            // 尝试从localStorage加载数据
+            const savedComments = localStorage.getItem('comments');
+            if (savedComments) {
+                comments = JSON.parse(savedComments);
+                renderComments();
+                updateCommentCount();
+            }
+        });
+        
+        // 渲染评论
+        function renderComments() {
+            commentsContainer.innerHTML = '';
+            
+            if (comments.length === 0) {
+                commentsContainer.innerHTML = `
+                    <div class="no-comments">
+                        <i class="fas fa-comment-slash"></i>
+                        <p>还没有评论，成为第一个评论者吧！</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            comments.forEach(comment => {
+                const commentElement = createCommentElement(comment);
+                commentsContainer.appendChild(commentElement);
+                
+                // 渲染回复
+                if (comment.replies && comment.replies.length > 0) {
+                    const repliesContainer = document.createElement('div');
+                    repliesContainer.className = 'replies';
+                    
+                    comment.replies.forEach(reply => {
+                        const replyElement = createCommentElement(reply, true);
+                        repliesContainer.appendChild(replyElement);
+                    });
+                    
+                    commentElement.appendChild(repliesContainer);
+                }
+            });
+        }
+        
+        // 创建评论元素
+        function createCommentElement(comment, isReply = false) {
+            const commentElement = document.createElement('div');
+            commentElement.className = isReply ? 'comment reply' : 'comment';
+            commentElement.dataset.id = comment.id;
+            
+            // 生成用户头像首字母
+            const avatarLetter = comment.username ? comment.username.charAt(0) : 'A';
+            
+            commentElement.innerHTML = `
+                <div class="comment-header">
+                    <div class="avatar" style="background-color: ${getRandomColor()}">${avatarLetter}</div>
+                    <div class="user-info">
+                        <div class="username">${comment.username || '匿名用户'}</div>
+                        <div class="timestamp">${comment.timestamp}</div>
+                    </div>
+                </div>
+                <div class="comment-content">${comment.content}</div>
+                <div class="comment-actions">
+                    <button class="action-btn like-btn ${comment.liked ? 'active' : ''}" onclick="toggleLike(${comment.id}, ${isReply})">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span class="like-count">${comment.likes}</span>
+                    </button>
+                    <button class="action-btn reply-btn" onclick="toggleReplyForm(${comment.id})">
+                        <i class="fas fa-reply"></i> 回复
+                    </button>
+                    <button class="action-btn share-btn">
+                        <i class="fas fa-share"></i> 分享
+                    </button>
+                </div>
+                <div class="reply-form" id="reply-form-${comment.id}">
+                    <textarea placeholder="输入您的回复..." rows="2"></textarea>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button onclick="submitReply(${comment.id})" style="flex: 1;">提交回复</button>
+                        <button onclick="toggleReplyForm(${comment.id})" style="background: #95a5a6;">取消</button>
+                    </div>
+                </div>
+            `;
+            
+            return commentElement;
+        }
+        
+        // 生成随机颜色
+        function getRandomColor() {
+            const colors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // 更新评论数量
+        function updateCommentCount() {
+            const totalComments = comments.reduce((total, comment) => {
+                return total + 1 + (comment.replies ? comment.replies.length : 0);
+            }, 0);
+            
+            commentCount.textContent = totalComments;
+        }
+        
+        // 切换点赞状态
+        function toggleLike(commentId, isReply = false) {
+            for (const comment of comments) {
+                // 处理主评论
+                if (comment.id === commentId) {
+                    comment.liked = !comment.liked;
+                    comment.likes += comment.liked ? 1 : -1;
+                    renderComments();
+                    saveToLocalStorage();
+                    return;
+                }
+                
+                // 处理回复
+                if (comment.replies) {
+                    const replyIndex = comment.replies.findIndex(reply => reply.id === commentId);
+                    if (replyIndex !== -1) {
+                        const reply = comment.replies[replyIndex];
+                        reply.liked = !reply.liked;
+                        reply.likes += reply.liked ? 1 : -1;
+                        renderComments();
+                        saveToLocalStorage();
+                        return;
+                    }
+                }
+            }
+        }
+        
+        // 切换回复表单显示
+        function toggleReplyForm(commentId) {
+            const replyForm = document.getElementById(`reply-form-${commentId}`);
+            replyForm.style.display = replyForm.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        // 提交回复
+        function submitReply(commentId) {
+            const replyForm = document.getElementById(`reply-form-${commentId}`);
+            const textarea = replyForm.querySelector('textarea');
+            const replyContent = textarea.value.trim();
+            
+            if (!replyContent) {
+                alert('回复内容不能为空');
+                return;
+            }
+            
+            const usernameInput = document.getElementById('username');
+            const username = usernameInput.value.trim() || '匿名用户';
+            
+            // 创建新回复
+            const newReply = {
+                id: Date.now(), // 使用时间戳作为ID
+                username: username,
+                timestamp: getCurrentTimestamp(),
+                content: replyContent,
+                likes: 0,
+                liked: false
+            };
+            
+            // 找到对应的评论并添加回复
+            const comment = comments.find(c => c.id === commentId);
+            if (comment) {
+                if (!comment.replies) comment.replies = [];
+                comment.replies.push(newReply);
+                
+                // 清空回复框并隐藏表单
+                textarea.value = '';
+                replyForm.style.display = 'none';
+                
+                renderComments();
+                updateCommentCount();
+                saveToLocalStorage();
+            }
+        }
+        
+        // 提交新评论
+        commentForm.addEventListener('click', () => {
+            const usernameInput = document.getElementById('username');
+            const commentInput = document.getElementById('comment');
+            
+            const username = usernameInput.value.trim();
+            const commentContent = commentInput.value.trim();
+            
+            if (!commentContent) {
+                alert('评论内容不能为空');
+                return;
+            }
+            
+            // 创建新评论
+            const newComment = {
+                id: Date.now(), // 使用时间戳作为ID
+                username: username || '匿名用户',
+                timestamp: getCurrentTimestamp(),
+                content: commentContent,
+                likes: 0,
+                liked: false,
+                replies: []
+            };
+            
+            // 添加到评论列表开头
+            comments.unshift(newComment);
+            
+            // 清空表单
+            commentInput.value = '';
+            usernameInput.value = '';
+            
+            renderComments();
+            updateCommentCount();
+            saveToLocalStorage();
+        });
+        
+        // 获取当前时间戳
+        function getCurrentTimestamp() {
+            const now = new Date();
+            return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+        
+        // 保存数据到localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('comments', JSON.stringify(comments));
+        }
+    </script>
+</body>
 </html>
